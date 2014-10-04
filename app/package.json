@@ -1,0 +1,11 @@
+{
+  "name": "Restdir",
+  "description": "A visa requirements rest api",
+  "author": "Ackermann Yuriy <ackermann.yuriy@gmail.com>",
+  "dependencies": {
+    "mongoose": "3.8.x",
+    "http":"0.10.x",
+    "url": "0.10.x"
+  },
+  "engine": "node >= 0.4.1"
+}
