@@ -27,24 +27,24 @@ var schemes = {
 
 	info: mongoose.Schema({
 		name: {
-			common: {type:String,required: true,unique: true},
-			official: {type:String,required: true,unique: true},
+			common: {type:String, required: true, unique: true},
+			official: {type:String, required: true, unique: true},
 			native: {
-				common: {type:String,required: true,unique: true},
-				official: {type:String,required: true,unique: true}
+				common: {type:String, unique: true},
+				official: {type:String, unique: true}
 			}
 		},
 		tld: [String],
-		cca2: {type:String, required: true,unique: true, indexed: true},
-		ccn3: {type:String, required: true, unique: true},
-		cca3: {type:String, required: true, unique: true},
+		cca2: {type:String, unique: true, indexed: true},
+		ccn3: {type:String, unique: true},
+		cca3: {type:String, unique: true},
 		currency: [String],
 		callingCode: [String],
-		capital: {type:String, required: true},
+		capital: String,
 		altSpellings: [String],
 		relevance: String,
-		region: {type:String,required: true},
-		subregion: {type:String,required: true},
+		region: String,
+		subregion: String,
 		nativeLanguage: String,
 		languages: mongoose.Schema.Types.Mixed,
 		translations: mongoose.Schema.Types.Mixed,
@@ -97,6 +97,7 @@ var dbMethods = {
 	},
 	get: function(type, id, callback){
 		Country[type].findBycca2(id, function (err, countries) {
+			if(err){console.log(err)}
 			callback(countries[0]);
 		});
 	}
