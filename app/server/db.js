@@ -68,11 +68,11 @@ var schemes = {
 }
 // 	set: Data.prototype.saltySha1 // some function called before saving the data
 var searchMethods = {
-	findByname: function (name, cb) {
-		this.find({ name: new RegExp(name, 'i') }, cb);
+	findByname: function (name, callback) {
+		this.find({ name: new RegExp(name, 'i') }, callback);
 	},
-	findBycca2: function (cca2, cb) {
-		this.find({ name: new RegExp(cca2, 'i') }, cb);
+	findBycca2: function (cca2, callback) {
+		this.find({ cca2: new RegExp(cca2, 'i') }, callback);
 	}
 }
 
@@ -96,11 +96,35 @@ var dbMethods = {
 		});
 	},
 	get: function(type, id, callback){
+		console.log(typeof(Country[type]));
 		Country[type].findBycca2(id, function (err, countries) {
 			if(err){console.log(err)}
+			if(countries[0] !== undefined && type === 'geo'){
+				var feature = {
+				    "features": [
+				        {
+				            "geometry": {
+				                "coordinates": countries[0].coordinates,
+				                "type": "MultiPolygon"
+				            },
+				            "id": countries[0].cca2,
+				            "properties": {
+				                "name": countries[0].name 
+				            },
+				            "type": "Feature"
+				        }
+				    ],
+				    "type": "FeatureCollection"
+				};
+				countries[0] = feature;
+			}
 			callback(countries[0] === undefined ? {dbError:"Not found"} : countries[0]);
 		});
 	}
 }
 
 exports.db = dbMethods;
+
+// dbMethods.get('visa','RU',function(err,data){
+// 	console.log(data);
+// })
