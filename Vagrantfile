@@ -31,5 +31,6 @@ Vagrant::Config.run do |config|
   config.vm.provision :shell, :inline => "sudo apt-get install -y redis-server --no-install-recommends"
   config.vm.provision :shell, :inline => "sudo apt-get install -y ruby1.9.1-dev --no-install-recommends"
   config.vm.provision :shell, :inline => "sudo apt-get install -y ruby1.9.3 --no-install-recommends"
+  config.vm.provision :shell, :inline => "sudo apt-get install -y mongodb-org --no-install-recommends"
   config.vm.provision :shell, :inline => "sudo gem install cf"
 end
