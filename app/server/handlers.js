@@ -1,19 +1,20 @@
 var exec = require("child_process").exec;
+var db = require("./db").db;
+
 
 var handler = {
-	'info': function(cca2){
-		return 'info ' + cca2;
+	'info': function(cca2, callback){
+		db.get('info', cca2, callback);
 	},
-	'visa': function(cca2) {
-		return 'visa ' + cca2;
+	'visa': function(cca2, callback) {
+		db.get('visa', cca2, callback);
 	},
-	'geo': function(cca2) {
-		return 'geo ' + cca2;
+	'geo': function(cca2, callback) {
+		db.get('geo', cca2, callback);
 
 	},
-	'wiki': function(cca2) {
-		return 'wiki ' + cca2;
-
+	'wiki': function(cca2, callback) {
+		db.get('wiki', cca2, callback);
 	}
 }
 
