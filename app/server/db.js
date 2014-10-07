@@ -98,7 +98,7 @@ var dbMethods = {
 	get: function(type, id, callback){
 		Country[type].findBycca2(id, function (err, countries) {
 			if(err){console.log(err)}
-			callback(countries[0]);
+			callback(countries[0] === undefined ? {dbError:"Not found"} : countries[0]);
 		});
 	}
 }
