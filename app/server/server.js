@@ -3,15 +3,14 @@ var url = require("url");
 
 function start(route, handle) {
 	function onRequest(request, response) {
-		var pathname = url.parse(request.url).pathname;
-		console.log("Request for " + pathname + " received.");
-
-		response.writeHead(200, {"Content-Type": "text/plain"});
-		console.log(pathname.slice(1))
+		var pathname = url.parse(request.url).pathname;		
+		response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
 		
-		var content = route(handle, pathname.slice(1))
-		response.write(content);
-		response.end();
+		route(handle, pathname.slice(1), function(content){
+			response.write(JSON.stringify(content));
+			response.end();
+		})
+		
 	}
 
 	http.createServer(onRequest).listen(3000);
