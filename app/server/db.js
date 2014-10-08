@@ -87,7 +87,25 @@ var Country = {
 	geo: mongoose.model('geo', schemes.geo),
 	wiki: mongoose.model('wiki', schemes.wiki)
 }
+var geoModel = function(json){
+	return {
+	    "features": [
+	        {
+	            "geometry": {
+	                "coordinates": json.coordinates,
+	                "type": "MultiPolygon"
+	            },
+	            "id": json.cca2,
+	            "properties": {
+	                "name": json.name 
+	            },
+	            "type": "Feature"
+	        }
+	    ],
+	    "type": "FeatureCollection"
+	}
 
+};
 var dbMethods = {
 	add: function(type, item){
 		var kitty = new Country[type](item);
@@ -96,35 +114,15 @@ var dbMethods = {
 		});
 	},
 	get: function(type, id, callback){
-		console.log(typeof(Country[type]));
 		Country[type].findBycca2(id, function (err, countries) {
 			if(err){console.log(err)}
-			if(countries[0] !== undefined && type === 'geo'){
-				var feature = {
-				    "features": [
-				        {
-				            "geometry": {
-				                "coordinates": countries[0].coordinates,
-				                "type": "MultiPolygon"
-				            },
-				            "id": countries[0].cca2,
-				            "properties": {
-				                "name": countries[0].name 
-				            },
-				            "type": "Feature"
-				        }
-				    ],
-				    "type": "FeatureCollection"
-				};
-				countries[0] = feature;
-			}
-			callback(countries[0] === undefined ? {dbError:"Not found"} : countries[0]);
+			callback(countries[0] === undefined ? {dbError:"Not found"} : function(){
+				if(type === 'geo'){
+					return geoModel(countries[0]);
+				}else return countries[0];
+			}());
 		});
 	}
 }
 
 exports.db = dbMethods;
-
-// dbMethods.get('visa','RU',function(err,data){
-// 	console.log(data);
-// })
