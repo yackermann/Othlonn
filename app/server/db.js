@@ -68,11 +68,14 @@ var schemes = {
 }
 // 	set: Data.prototype.saltySha1 // some function called before saving the data
 var searchMethods = {
-	findByname: function (name, callback) {
+	findByName: function (name, callback) {
 		this.find({ name: new RegExp(name, 'i') }, callback);
 	},
-	findBycca2: function (cca2, callback) {
+	findByCCA2: function (cca2, callback) {
 		this.find({ cca2: new RegExp(cca2, 'i') }, callback);
+	},
+	getAll: function (callback) {
+		this.find({}, callback);
 	}
 }
 
@@ -114,13 +117,18 @@ var dbMethods = {
 		});
 	},
 	get: function(type, id, callback){
-		Country[type].findBycca2(id, function (err, countries) {
+		Country[type].findByCCA2(id, function (err, countries) {
 			if(err){console.log(err)}
 			callback(countries[0] === undefined ? {dbError:"Not found"} : function(){
 				if(type === 'geo'){
 					return geoModel(countries[0]);
 				}else return countries[0];
 			}());
+		});
+	},
+	getAll: function(type, callback){
+		Country[type].getAll(function (err, data) {
+			callback(data);
 		});
 	}
 }

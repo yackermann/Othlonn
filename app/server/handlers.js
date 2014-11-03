@@ -1,21 +1,17 @@
 var exec = require("child_process").exec;
 var db = require("./db").db;
 
+var processor = function(type, id, callback) {
+	if(id !== '' && id !== undefined){
+		db.get(type, id, callback);
+	}else db.getAll(type, callback);
+};
 
 var handler = {
-	'info': function(cca2, callback){
-		db.get('info', cca2, callback);
-	},
-	'visa': function(cca2, callback) {
-		db.get('visa', cca2, callback);
-	},
-	'geo': function(cca2, callback) {
-		db.get('geo', cca2, callback);
-
-	},
-	'wiki': function(cca2, callback) {
-		db.get('wiki', cca2, callback);
-	}
-}
+	'info': processor,
+	'visa': processor,
+	'geo': processor,
+	'wiki': processor
+};
 
 exports.handler = handler;
